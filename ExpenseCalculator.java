@@ -83,15 +83,15 @@ public class ExpenseCalculator {
         }
         
         // Calculate the total amount that the user spent 
-        List<String> nameList = new ArrayList<String>(uniqueName); // convert set to list 
+        List<String> nameList = new ArrayList<String>(uniqueName); // convert set to list of username
+        HashMap<Integer, ArrayList<Expense>> HashDate = new HashMap();
         for (String x : nameList){
             Double total = 0.0 ;
             List<Expense> UserExpenseList = HashExpense.get(x);
             for (int i = 0; i < UserExpenseList.size(); i++){
                 Expense item = UserExpenseList.get(i);
                 int[] itemDate = {item.PurchaseDate.getMonthValue(), item.PurchaseDate.getYear()};
-                int currentMonth = item.PurchaseDate.getMonthValue();
-                // itemDate == Date is incorrect due to both array are store in different location : == compare object location
+                // itemDate == Date cant be use due to both array are store in different location : == compare object location
                 if (Arrays.equals(itemDate, Date)) //.equals compare value 
                 {
                   total = item.Price * item.Quantity + total;
@@ -150,132 +150,134 @@ public class ExpenseCalculator {
         System.out.print("");
     }
 
+    // TESTING SECTION- IGNORABLE 
+
     // LocalDate (creating, adding days/months, formatting, comparing).
 
-    static void LocalDateTimeExample(){
-        // Creating current date and time 
-        LocalDate date = LocalDate.now();
-        System.out.println("Current Date: " + date); // 2025-10-01
+    // static void LocalDateTimeExample(){
+    //     // Creating current date and time 
+    //     LocalDate date = LocalDate.now();
+    //     System.out.println("Current Date: " + date); // 2025-10-01
 
-        LocalTime time = LocalTime.now();
-        System.out.println("Current Time: " +time); // 04:32:25.197061
+    //     LocalTime time = LocalTime.now();
+    //     System.out.println("Current Time: " +time); // 04:32:25.197061
 
-        LocalDateTime dateTime = LocalDateTime.now();
-        System.out.println("Current DateTime: " + dateTime); // 2025-10-01T04:32:25.197061
+    //     LocalDateTime dateTime = LocalDateTime.now();
+    //     System.out.println("Current DateTime: " + dateTime); // 2025-10-01T04:32:25.197061
 
-        // Adding days/months/years/hours/minutes
-        LocalDateTime PlaceHolderDateTime = LocalDateTime.of(1997, 4, 9, 8, 30);
-        System.out.println("My Birthdate is on: " + PlaceHolderDateTime); // 1997-04-09T
-        LocalDateTime AddedDateHolder = PlaceHolderDateTime.plusYears(28);
-        System.out.println("After 28 years: " + AddedDateHolder); // 2025-04-09T08:30
+    //     // Adding days/months/years/hours/minutes
+    //     LocalDateTime PlaceHolderDateTime = LocalDateTime.of(1997, 4, 9, 8, 30);
+    //     System.out.println("My Birthdate is on: " + PlaceHolderDateTime); // 1997-04-09T
+    //     LocalDateTime AddedDateHolder = PlaceHolderDateTime.plusYears(28);
+    //     System.out.println("After 28 years: " + AddedDateHolder); // 2025-04-09T08:30
 
 
-        // Format of dateTime instance 
-        DateTimeFormatter format = DateTimeFormatter.ofPattern("dd MM YYYY HH:mm");
-        String newDateFormat = dateTime.format(format);
-        System.out.println("DateTime: " + newDateFormat); // 01 10 2025 10:27
+    //     // Format of dateTime instance 
+    //     DateTimeFormatter format = DateTimeFormatter.ofPattern("dd MM YYYY HH:mm");
+    //     String newDateFormat = dateTime.format(format);
+    //     System.out.println("DateTime: " + newDateFormat); // 01 10 2025 10:27
 
-        // Creating a specific date and time 
-        LocalDateTime date1 = LocalDateTime.of(2025, 1, 25, 4,04);
-        LocalDateTime date2 = LocalDateTime.of(2025,1, 26,10, 20);
-        System.out.printf("Date1: %s %nDate2: %s%n", date1,date2);
+    //     // Creating a specific date and time 
+    //     LocalDateTime date1 = LocalDateTime.of(2025, 1, 25, 4,04);
+    //     LocalDateTime date2 = LocalDateTime.of(2025,1, 26,10, 20);
+    //     System.out.printf("Date1: %s %nDate2: %s%n", date1,date2);
 
-        // Comparing dates
-        if(date1.isEqual(date2)){
-            System.out.println("Date 1 and date 2 are equal");
-        }
-        else if(date1.isBefore(date2)){
-            System.out.println("Date 1 is before date 2");
-        }
-        else if(date1.isAfter(date2)){
-            System.out.println("Date 1 is after date 2");
-        }
-    }
+    //     // Comparing dates
+    //     if(date1.isEqual(date2)){
+    //         System.out.println("Date 1 and date 2 are equal");
+    //     }
+    //     else if(date1.isBefore(date2)){
+    //         System.out.println("Date 1 is before date 2");
+    //     }
+    //     else if(date1.isAfter(date2)){
+    //         System.out.println("Date 1 is after date 2");
+    //     }
+    // }
     
-    // Parsing strings into dates and doing date arithmetic: can only parse from object into primitive types
-    static void ManipulateLocalDateTimeExample(){
+    // // Parsing strings into dates and doing date arithmetic: can only parse from object into primitive types
+    // static void ManipulateLocalDateTimeExample(){
 
-        // Parsing from String to primitive int 
-        String num = "2025";
-        int parsedNum = Integer.parseInt(num);
-        System.out.println("Parsed Number: " + parsedNum);
-        LocalDate currentDate  = LocalDate.now();
-        System.out.println("Current Date: " + currentDate);
+    //     // Parsing from String to primitive int 
+    //     String num = "2025";
+    //     int parsedNum = Integer.parseInt(num);
+    //     System.out.println("Parsed Number: " + parsedNum);
+    //     LocalDate currentDate  = LocalDate.now();
+    //     System.out.println("Current Date: " + currentDate);
 
-        // Parsing from String as LocalDate
-        DateTimeFormatter DOBFormat = DateTimeFormatter.ofPattern("yyyy-MM-dd");
-        LocalDate DOB = null;
+    //     // Parsing from String as LocalDate
+    //     DateTimeFormatter DOBFormat = DateTimeFormatter.ofPattern("yyyy-MM-dd");
+    //     LocalDate DOB = null;
         
 
-        Scanner input = new Scanner(System.in);
-        System.out.println("What's your Date of Birth? (yyyy-MM-dd)");
-        String userDOB = input.next();
+    //     Scanner input = new Scanner(System.in);
+    //     System.out.println("What's your Date of Birth? (yyyy-MM-dd)");
+    //     String userDOB = input.next();
 
-        while (DOB == null){
-            try{
-                LocalDate tempDOB = LocalDate.parse(userDOB, DOBFormat);
-                if (tempDOB.isAfter(LocalDate.now().minusYears(150)) || tempDOB.isBefore(LocalDate.now()) || tempDOB.isEqual(LocalDate.now())){
-                    DOB = tempDOB;
-                    System.out.println("Your DOB is: " + userDOB);
-                }
-                else{
-                    System.out.println("Invalid Date. Please enter a valid DOB (YYYY-MM-DD)");
-                    userDOB = input.next();
-                    continue;
-                }
-            }
-            catch (DateTimeParseException e){
-                System.out.println("Invalid Date Format. Please use YYYY-MM-DD");
-                userDOB = input.next();
-            }
-        }
-        // close Scanner object
-        input.close();
+    //     while (DOB == null){
+    //         try{
+    //             LocalDate tempDOB = LocalDate.parse(userDOB, DOBFormat);
+    //             if (tempDOB.isAfter(LocalDate.now().minusYears(150)) || tempDOB.isBefore(LocalDate.now()) || tempDOB.isEqual(LocalDate.now())){
+    //                 DOB = tempDOB;
+    //                 System.out.println("Your DOB is: " + userDOB);
+    //             }
+    //             else{
+    //                 System.out.println("Invalid Date. Please enter a valid DOB (YYYY-MM-DD)");
+    //                 userDOB = input.next();
+    //                 continue;
+    //             }
+    //         }
+    //         catch (DateTimeParseException e){
+    //             System.out.println("Invalid Date Format. Please use YYYY-MM-DD");
+    //             userDOB = input.next();
+    //         }
+    //     }
+    //     // close Scanner object
+    //     input.close();
 
-    }
+    // }
     
-    // Calculate Expenses  
-    static void ExpenseCalculatorExample(){
-        // scanner class - user input
-        Scanner scan = new Scanner(System.in);
-        Double price = 0.00;
-        Double total = 0.00;
-        Double tax = 0.00;
-        Boolean addItem = true;
-        int itemCount = 1;
-        int numItem = 0;
+    // // Calculate Expenses  
+    // static void ExpenseCalculatorExample(){
+    //     // scanner class - user input
+    //     Scanner scan = new Scanner(System.in);
+    //     Double price = 0.00;
+    //     Double total = 0.00;
+    //     Double tax = 0.00;
+    //     Boolean addItem = true;
+    //     int itemCount = 1;
+    //     int numItem = 0;
 
-        while(addItem){
-            System.out.printf("Item %d price: " , itemCount);
-            price = scan.nextDouble();
-            if (price <= 0.00){
-                System.out.println("The item can not be negative, try again: ");
-                price = scan.nextDouble();
-            }
-            else{
-                System.out.printf("How many of the item %d did you bought: ", itemCount);
-                numItem = scan.nextInt();
-                if (numItem <= 0){
-                    System.out.printf("The item %d can not be less than or equal to 0, try again ", itemCount);
-                    numItem = scan.nextInt();
-                }
-                else{
-                    price = price * numItem;
-                    total = total + price;
-                }
-            }
-            tax = Math.round((total + (total * 0.05))*100.0)/100.0;
+    //     while(addItem){
+    //         System.out.printf("Item %d price: " , itemCount);
+    //         price = scan.nextDouble();
+    //         if (price <= 0.00){
+    //             System.out.println("The item can not be negative, try again: ");
+    //             price = scan.nextDouble();
+    //         }
+    //         else{
+    //             System.out.printf("How many of the item %d did you bought: ", itemCount);
+    //             numItem = scan.nextInt();
+    //             if (numItem <= 0){
+    //                 System.out.printf("The item %d can not be less than or equal to 0, try again ", itemCount);
+    //                 numItem = scan.nextInt();
+    //             }
+    //             else{
+    //                 price = price * numItem;
+    //                 total = total + price;
+    //             }
+    //         }
+    //         tax = Math.round((total + (total * 0.05))*100.0)/100.0;
             
-            System.out.printf("the item number %d cost %.2f, the total is %.2f with tax is %.2f%n", itemCount, price, total, tax);
-            System.out.println("To continue adding item press 1 else 0: ");
-            int choice = scan.nextInt();
-            addItem = (choice==1);
-            itemCount ++;
+    //         System.out.printf("the item number %d cost %.2f, the total is %.2f with tax is %.2f%n", itemCount, price, total, tax);
+    //         System.out.println("To continue adding item press 1 else 0: ");
+    //         int choice = scan.nextInt();
+    //         addItem = (choice==1);
+    //         itemCount ++;
 
-        }
-        scan.close();
+    //     }
+    //     scan.close();
 
-    }
+    // }
     
     // Expenses Keeper Application
     // You work for a small software company that needs to automatically generate invoices for customers. Each invoice includes a list of purchased items, their prices, and quantities. You need to calculate totals and due dates.
