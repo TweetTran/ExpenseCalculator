@@ -17,93 +17,61 @@ import java.io.BufferedReader;
 
 
 public class ExpenseCalculator {
+
     static void ExpensesKeeperApp() throws IOException{
         // Expense class 
-        class Expense{
+        class monthlyExpense {
             String Name;
-            String Item;
-            Double Price;
-            Integer Quantity;
-            LocalDate PurchaseDate;
+            int year;
+            int month;
+            double total;
+        }
+        class Expense{ 
+            String Name; 
+            String Item; 
+            Double Price; 
+            Integer Quantity; 
+            LocalDate PurchaseDate; 
         }
 
-        Double tax = 0.05;
-        String line;
-        int[] Date = {8,2025};
-        // int[] Date = {LocalDate.now().getMonthValue(),LocalDate.now().getYear()}; // current month and year 
-
-
-        // Get/Handel CSV file 
         File file = null;
         try {
-             file = new File("Expenses.csv");
+            file = new File("Expenses.csv");
         }
         catch (Exception e){
-            System.out.print("Something wrong with your CSV file");
+            System.out.print("error in opening the file");
         }
+        String line;
 
-        FileReader fileReader = new FileReader(file); //  file reader class is one of the file reader 
-
-        BufferedReader bufferedReader = new BufferedReader(fileReader); // can only read FileReader or InputStreamReader: more efficient way to read text  
-
+        FileReader csvReader = new FileReader(file);
+        BufferedReader bufferedReader = new BufferedReader(csvReader);
         List<Expense> ExpenseList = new ArrayList<>();
-
-        DateTimeFormatter formatDateTime = DateTimeFormatter.ofPattern("yyyy-MM-dd");
-
-
-        // skip the header line in the csv file 
-        bufferedReader.readLine(); 
-
-        // the process of putting raw data into arrays that store data types 
-        while ((line = bufferedReader.readLine()) != null)
-        {
-            String[] data = line.split(",");
-                Expense e = new Expense();
-                e.Name = data[0].trim();
-                e.Item = data[1].trim();
-                e.Price = Double.parseDouble(data[2].trim());
-                e.Quantity = Integer.parseInt(data[3].trim());
-                e.PurchaseDate = LocalDate.parse(data[4].trim(),formatDateTime);
-                ExpenseList.add(e);
-            }
+        DateTimeFormatter dateTimeFormatter = DateTimeFormatter.ofPattern("yyyy-MM-dd");
+        bufferedReader.readLine();
+        while ((line = bufferedReader.readLine()) != null) { 
+            String[] data = line.split(","); 
+            Expense e = new Expense(); 
+            e.Name = data[0].trim(); 
+            e.Item = data[1].trim(); 
+            e.Price = Double.parseDouble(data[2].trim()); 
+            e.Quantity = Integer.parseInt(data[3].trim()); 
+            e.PurchaseDate = LocalDate.parse(data[4].trim(),dateTimeFormatter); 
+            ExpenseList.add(e); 
+        }
         bufferedReader.close();
 
-        // put data into hashmap by username
-        HashMap<String, ArrayList<Expense>> HashExpense = new HashMap<>();
-        Set<String> uniqueName = new HashSet<>();
-        Set<Integer> uniqueYear = new HashSet<>();
-        for (int i = 0; i<ExpenseList.size(); i++){
-            Expense e = ExpenseList.get(i);
-            uniqueName.add(e.Name);
-            uniqueYear.add(e.PurchaseDate.getYear());
-            if (!HashExpense.containsKey(e.Name)){ // the key for hash  
-                HashExpense.put(e.Name, new ArrayList<Expense>());
-            }
-            HashExpense.get(e.Name).add(e);
-        }
-        
-        // Calculate the total amount that the user spent 
-        List<String> nameList = new ArrayList<String>(uniqueName); // convert set to list of username
-        HashMap<Integer, ArrayList<Expense>> HashDate = new HashMap();
-        for (String x : nameList){
-            Double total = 0.0 ;
-            List<Expense> UserExpenseList = HashExpense.get(x);
-            for (int i = 0; i < UserExpenseList.size(); i++){
-                Expense item = UserExpenseList.get(i);
-                int[] itemDate = {item.PurchaseDate.getMonthValue(), item.PurchaseDate.getYear()};
-                // itemDate == Date cant be use due to both array are store in different location : == compare object location
-                if (Arrays.equals(itemDate, Date)) //.equals compare value 
-                {
-                  total = item.Price * item.Quantity + total;
-                }
-                // TODOS: set of month and year and total since month have many of the same date, like name it can get added as long as the year is equal to each other. 
+        HashMap <String, Double> monthlyTotal = new HashMap<>();
+        for (Expense e: ExpenseList){
+            String MonthYear = e.PurchaseDate.getYear() + "/" +String.format("%02d", e.PurchaseDate.getMonthValue());
+            String Key = e.Name +"-" + MonthYear;
+            Double Total = e.Price * e.Quantity; 
 
-                
-            } 
-            System.out.printf("User Name: %s  The total: %.2f  Month: %d, %d %n", x, (total+(total*tax))*100 /100,Date[0], Date[1]);
+            monthlyTotal.put(Key, monthlyTotal.getOrDefault(Key, 0.0)+Total);// getOrDefault is the map method mean “Return the value for this key if it exists; otherwise, return the default value I give you.”
+
         }
 
-        // Calculate the total amount every month
+        // printing out the result : .split(-(?=\\d)) mean that split at - with (?=...) positive lookahead and \\d mean interger digit from (0-9)
+        monthlyTotal.forEach((key, total) -> System.out.printf("User: %-3s  Date: %s    Total: $%-10.2f%n", key.substring(0,key.length()-8), key.substring(key.length()-7),(total + (total*0.5))));
         
     }
     public static void main(String[] args) throws IOException {
@@ -285,6 +253,33 @@ public class ExpenseCalculator {
     // Calculate total amount for each item (price * quantity) and overall total for the invoice
     // Output will display customer name, invoice date, due date, list of items with their total amounts, and overall total amount.
     // Add tax, into each purchase, 
+
+
+    
+    //Lambda Example :  a shorter way to write code 
+    static void LambdaExample(){
+
+        @FunctionalInterface
+        interface AddMath{
+            int add (int i, int j);
+
+        }
+
+        // // Adding Lambda will shorten this 
+        // AddMath test = new AddMath(){
+        //     public int add(int i, int j){
+        //         return i+j;
+        //     }
+        // };
+
+        // create object of the interface, give it parameter and direct what is does 
+        AddMath test = (i,j) -> i+j; 
+
+        int total = test.add(4,5);
+        System.out.print(total);
+    }
+
+
     
 }
     
