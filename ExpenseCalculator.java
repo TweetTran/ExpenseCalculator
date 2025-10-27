@@ -19,13 +19,14 @@ import java.io.BufferedReader;
 public class ExpenseCalculator {
 
     static void ExpensesKeeperApp() throws IOException{
-        // Expense class 
+        // MonthlyExpense class use to create a hashtable
         class monthlyExpense {
             String Name;
             int year;
             int month;
             double total;
         }
+        // Expense class use to hold the csv data 
         class Expense{ 
             String Name; 
             String Item; 
@@ -34,6 +35,7 @@ public class ExpenseCalculator {
             LocalDate PurchaseDate; 
         }
 
+        // open CSV file 
         File file = null;
         try {
             file = new File("Expenses.csv");
@@ -41,13 +43,20 @@ public class ExpenseCalculator {
         catch (Exception e){
             System.out.print("error in opening the file");
         }
+        // line: hold the line that being parse into the program 
         String line;
 
+        // Read and Parse the CSV file 
+        // File Reader is a simple read CSV file into the system
         FileReader csvReader = new FileReader(file);
+        //Buffer Reader is more efficient way to mold the data
         BufferedReader bufferedReader = new BufferedReader(csvReader);
+        // Create a list of Expense Objects 
         List<Expense> ExpenseList = new ArrayList<>();
         DateTimeFormatter dateTimeFormatter = DateTimeFormatter.ofPattern("yyyy-MM-dd");
+        //Skip the Header by read the first line 
         bufferedReader.readLine();
+        // Reading/Parsing process
         while ((line = bufferedReader.readLine()) != null) { 
             String[] data = line.split(","); 
             Expense e = new Expense(); 
@@ -60,7 +69,9 @@ public class ExpenseCalculator {
         }
         bufferedReader.close();
 
+        // Hashmap that hold name and total expenses 
         HashMap <String, Double> monthlyTotal = new HashMap<>();
+        // : is a for each symbol uses in replacement of traditional for loop
         for (Expense e: ExpenseList){
             String MonthYear = e.PurchaseDate.getYear() + "/" +String.format("%02d", e.PurchaseDate.getMonthValue());
             String Key = e.Name +"-" + MonthYear;
@@ -70,10 +81,17 @@ public class ExpenseCalculator {
 
         }
 
-        // printing out the result : .split(-(?=\\d)) mean that split at - with (?=...) positive lookahead and \\d mean interger digit from (0-9)
-        monthlyTotal.forEach((key, total) -> System.out.printf("User: %-3s  Date: %s    Total: $%-10.2f%n", key.substring(0,key.length()-8), key.substring(key.length()-7),(total + (total*0.5))));
-        
+        // Printing out the result : Using Lambda -> to shorten the code, the interface that applied is biConsumer<k,v>: mean 2 consumeable values. Every Hash is biConsumer but not every biConsumer is not hash because biConsumer can be just simple as (x,y). The Bracket cover the ((k, v) -> System.out.print) due to the forEach()
+        monthlyTotal.forEach(
+            (key, total) -> 
+                System.out.printf
+                        ("User: %-3s  Date: %s    Total: $%-10.2f%n", 
+                        key.substring(0,key.length()-8), 
+                        key.substring(key.length()-7),
+                        (total + (total*0.5)))
+                        );
     }
+    
     public static void main(String[] args) throws IOException {
         // LocalDateTimeExample();
         // ManipulateLocalDateTimeExample();
