@@ -181,7 +181,7 @@ public class ExpenseCalculator {
     // }
     
     // // Parsing strings into dates and doing date arithmetic: can only parse from object into primitive types
-    // static void ManipulateLocalDateTimeExample(){
+    static void ManipulateLocalDateTimeExample(){
 
     //     // Parsing from String to primitive int 
     //     String num = "2025";
@@ -220,10 +220,10 @@ public class ExpenseCalculator {
     //     // close Scanner object
     //     input.close();
 
-    // }
+    }
     
     // // Calculate Expenses  
-    // static void ExpenseCalculatorExample(){
+    static void ExpenseCalculatorExample(){
     //     // scanner class - user input
     //     Scanner scan = new Scanner(System.in);
     //     Double price = 0.00;
@@ -263,7 +263,7 @@ public class ExpenseCalculator {
     //     }
     //     scan.close();
 
-    // }
+    }
     
     // Expenses Keeper Application
     // You work for a small software company that needs to automatically generate invoices for customers. Each invoice includes a list of purchased items, their prices, and quantities. You need to calculate totals and due dates.
