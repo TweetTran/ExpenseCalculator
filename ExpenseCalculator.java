@@ -140,7 +140,7 @@ public class ExpenseCalculator {
 
     // LocalDate (creating, adding days/months, formatting, comparing).
 
-    // static void LocalDateTimeExample(){
+     static void LocalDateTimeExample(){
     //     // Creating current date and time 
     //     LocalDate date = LocalDate.now();
     //     System.out.println("Current Date: " + date); // 2025-10-01
@@ -178,7 +178,7 @@ public class ExpenseCalculator {
     //     else if(date1.isAfter(date2)){
     //         System.out.println("Date 1 is after date 2");
     //     }
-    // }
+    }
     
     // // Parsing strings into dates and doing date arithmetic: can only parse from object into primitive types
     static void ManipulateLocalDateTimeExample(){
